@@ -1,3 +1,4 @@
+import 'package:event_calendar/Calendar_Enums.dart';
 import 'package:event_calendar/Event.dart';
 import 'package:event_calendar/Result.dart';
 
@@ -15,7 +16,7 @@ class Calendar{
 
   operator ==(other) =>id == other.id;
 
-  List<Event> getEvents(DateTime start, DateTime end, {convertToLocal = false}){
+  List<Event> getEvents(DateTime start, DateTime end, {convertToLocal = true}){
     List<Event> tempEvents = List();
 
     if(events.length == 0){
@@ -41,6 +42,40 @@ class Calendar{
 
     return tempEvents;
   }
+
+  Event getNextEvent({Event event, DateTime startAfter}){
+    if(event == null && startAfter == null){
+      startAfter = convertFromLocal(DateTime.now());
+    }else if(event != null){
+      startAfter = event.currentDate;
+    }
+    Event nextTime;
+    int compare;
+    for(int i = 0; i < events.length; i++){
+      Event nextEvent = events[i].getNextEvent(startAfter: startAfter);
+      if(nextEvent != null && nextEvent.currentDate.millisecondsSinceEpoch >= startAfter.millisecondsSinceEpoch && (nextTime == null || (nextTime != null && nextEvent.currentDate.millisecondsSinceEpoch < nextTime.currentDate.millisecondsSinceEpoch))){
+        if(event != null && events[i].title.compareTo(event.title).isNegative || compare == null) {
+          if(nextTime != null) {
+            compare = events[i].title.compareTo(nextTime.title);
+          }else{
+            compare = events[i].title.compareTo(event.title);
+          }
+
+          if(compare < 0 || nextEvent.currentDate != event.currentDate) {
+            nextTime = nextEvent;
+          }
+
+        }else{
+          nextTime = events[i].getNextEvent();
+        }
+
+      }
+    }
+
+
+    return nextTime;
+  }
+
 
   //Inlcusive
   bool DateTimeBetween(DateTime time, DateTime start, DateTime end){

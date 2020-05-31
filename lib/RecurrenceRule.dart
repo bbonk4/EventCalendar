@@ -341,7 +341,7 @@ class RecurrenceRule{
     List<DateTime> times = List();
     DateTime time = nextDateTime(start);
 
-    while(time != null && time.difference(end).isNegative && (until == null || (until != null && time != until && time.difference(until).isNegative))){
+    while(time != null && (time.difference(end).isNegative || time.difference(end) == Duration.zero) && (until == null || (until != null && time != until && (time.difference(until).isNegative || time.difference(until) == Duration.zero)))){
       times.add(time);
       time = nextDateTime(time, position: times.length);
     }

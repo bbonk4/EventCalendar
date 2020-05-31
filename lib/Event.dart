@@ -8,6 +8,7 @@ class Event{
   String description;
   String id;
   DateTime startDate;
+  DateTime currentDate;
   DateTime endDate;
   Object attached;
   bool allDay;
@@ -16,8 +17,13 @@ class Event{
 
 
 
-  Event(this.startDate, {this.title, this.attached, this.id, this.description, this.endDate, this.allDay, this.recurrenceRule, this.reminder}){
+  Event(this.startDate, {this.title, this.attached, this.id, this.description, this.currentDate, this.endDate, this.allDay, this.recurrenceRule, this.reminder}){
     startDate = convertFromLocal(startDate);
+    if(currentDate == null) {
+      currentDate = startDate;
+    }else{
+      currentDate = convertFromLocal(currentDate);
+    }
     if(endDate == null){
       this.endDate = startDate;
     }
@@ -29,6 +35,7 @@ class Event{
   Event clone(){
     return Event(
       startDate,
+      currentDate: currentDate,
       id: id,
       title: title,
       allDay: allDay,
@@ -42,45 +49,78 @@ class Event{
 
   void convertEventToLocal(){
     startDate = convertToLocal(startDate);
+    currentDate = convertToLocal(currentDate);
     endDate = convertToLocal(endDate);
   }
 
   //TODO Switch this to check the id
-  operator ==(other) =>startDate == other.startDate;
+  operator ==(other) {
+   return currentDate == other.currentDate && title == other.title;
+  }
 
-  // Return null if there is no next Date
-  // (Exclusive)
-  Result<List<Event>> between(DateTime start, DateTime end){
-    start = convertFromLocal(start);
-    end = convertFromLocal(end);
-    Result<List<Event>> result = new Result();
-    result.data = new List();
+    Event getNextEvent({DateTime startAfter}){
+      Event nextTime;
 
-    //First check if single date
-    if(startDate != null && endDate != null){
+      if(startAfter == null){
+        startAfter = currentDate;
+      }
 
       if(recurrenceRule != null){
-        Result rResult = recurrenceRule.between(start, end);
-        if(rResult.passed){
-          for(int i = 0; i < rResult.data.length; i++){
-            Event tempEvent = clone();
-            tempEvent.startDate = rResult.data[i];
-            result.data.add(tempEvent);
-          }
+        DateTime nextDate;
+
+        if(startAfter != null) {
+          nextDate = recurrenceRule.nextDateTime(startAfter);
+        }else{
+          nextDate = recurrenceRule.nextDateTime(currentDate);
         }
+
+        if(nextDate != null && (recurrenceRule.until == null || (recurrenceRule.until != null && nextDate != recurrenceRule.until && (nextDate.difference(recurrenceRule.until).isNegative || nextDate.difference(recurrenceRule.until) == Duration.zero)))){
+          nextTime = clone();
+          nextTime.currentDate = nextDate;
+        }
+
 
 
       }else{
-        if(start.millisecondsSinceEpoch < startDate.millisecondsSinceEpoch && startDate.millisecondsSinceEpoch < end.millisecondsSinceEpoch) {
-          result.data = [clone()];
+        if(startAfter.difference(startDate).isNegative){
+          nextTime = this;
         }
       }
-    }else{
-      result.errorMessages.add("no next Date");
+
+      return nextTime;
     }
 
-    return result;
+    // Return null if there is no next Date
+    // (Exclusive)
+    Result<List<Event>> between(DateTime start, DateTime end){
+      start = convertFromLocal(start);
+      end = convertFromLocal(end);
+      Result<List<Event>> result = new Result();
+      result.data = new List();
+
+      //First check if single date
+      if(startDate != null && endDate != null){
+
+        if(recurrenceRule != null){
+          Result rResult = recurrenceRule.between(start, end);
+          if(rResult.passed){
+            for(int i = 0; i < rResult.data.length; i++){
+              Event tempEvent = clone();
+              tempEvent.currentDate = rResult.data[i];
+              result.data.add(tempEvent);
+            }
+          }
+
+
+        }else{
+          if(start.millisecondsSinceEpoch < currentDate.millisecondsSinceEpoch && currentDate.millisecondsSinceEpoch <= end.millisecondsSinceEpoch) {
+            result.data = [clone()];
+          }
+        }
+      }else{
+        result.errorMessages.add("no next Date");
+      }
+
+      return result;
+    }
   }
-
-
-}
