@@ -33,13 +33,15 @@ List<Events> events = calendar.getEvents(start, end);
 [x] Get next Event <br>
 [x] Get events in time frame <br>
 [x] Limit event ocurrences <br>
+[x] Intervals <br>
 [x] Recurring events <br>
    - Hourly <br>
    - Daily <br>
    - Weekly <br>
    - Monthly (both from start of month and from last date) <br>
    - Yearly <br>
-[x] Intervals <br>
+   
+
 
 TODO <br>
 [] Completions <br>
