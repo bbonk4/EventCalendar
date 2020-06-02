@@ -29,22 +29,22 @@ List<Events> events = calendar.getEvents(start, end);
 ```
 
 ## Calendar Features
-[x] Parse to and from json
-[x] Get next Event
-[x] Get events in time frame
-[x] Limit event ocurrences
-[x] Recurring events 
-    - Hourly
-    - Daily
-    - Weekly
-    - Monthly (both from start of month and from last date)
-    - Yearly
-[x] Intervals
+[x] Parse to and from json <br>
+[x] Get next Event <br>
+[x] Get events in time frame <br>
+[x] Limit event ocurrences <br>
+[x] Recurring events <br>
+   - Hourly <br>
+   - Daily <br>
+   - Weekly <br>
+   - Monthly (both from start of month and from last date) <br>
+   - Yearly <br>
+[x] Intervals <br>
 
-TODO
-[] Completions
-[] Exceptions
-[] Exclusions
+TODO <br>
+[] Completions <br>
+[] Exceptions <br>
+[] Exclusions <br>
 
 
     
