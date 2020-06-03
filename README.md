@@ -12,7 +12,7 @@ Due to the nature of this package unit testing can be dificult so if you find an
 ## Usage
 
 Start off by creating a calendar. You can add an event with the ```addEvent(Event event)```.
-you can follow the simple example below or look at the ```./example/main.dart``` file.
+You can follow the simple example below or look at the ```./example/main.dart``` file.
 ```
 Calendar calendar = new Calendar(title: "My Calendar", id:"calendarID");
 
