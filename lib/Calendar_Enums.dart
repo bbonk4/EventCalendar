@@ -35,3 +35,35 @@ DateTime convertToLocal(DateTime time){
     return null;
   return DateTime(time.year, time.month, time.day, time.hour, time.minute, time.second);
 }
+
+String dayOfWeekToString (List<DayOfTheWeek> dayOfTheWeek){
+  return dayOfTheWeek.toList().toString();
+}
+
+List<DayOfTheWeek> stringToDayOfWeek (String text){
+  return text.split(",").map((text){
+    if(text.contains("Monday")){
+      return DayOfTheWeek.Monday;
+    }
+    if(text.contains("Tuesday")){
+      return DayOfTheWeek.Tuesday;
+    }
+    if(text.contains("Wednesday")){
+      return DayOfTheWeek.Wednesday;
+    }
+    if(text.contains("Thursday")){
+      return DayOfTheWeek.Thursday;
+    }
+    if(text.contains("Friday")){
+      return DayOfTheWeek.Friday;
+    }
+    if(text.contains("Saturday")){
+      return DayOfTheWeek.Saturday;
+    }
+    if(text.contains("Sunday")){
+      return DayOfTheWeek.Sunday;
+    }
+    return null;
+
+  }).toList();
+}

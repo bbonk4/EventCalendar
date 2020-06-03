@@ -14,7 +14,8 @@ class Calendar{
     }
   }
 
-  operator ==(other) =>id == other.id;
+  operator ==(other) => id == other.id;
+  int get hashCode => (super.hashCode);
 
   List<Event> getEvents(DateTime start, DateTime end, {convertToLocal = true}){
     List<Event> tempEvents = List();
@@ -76,9 +77,20 @@ class Calendar{
     return nextTime;
   }
 
+  factory Calendar.fromJson(Map<String,dynamic> json){
+    return Calendar(
+      id:json['id'],
+    );
+  }
+
+  Map<String,dynamic> toJson() {
+    return {"id":id,"title":title, "events":events.map((event){
+      return event.toJson();
+    }).toList()};
+  }
 
   //Inlcusive
-  bool DateTimeBetween(DateTime time, DateTime start, DateTime end){
+  bool dateTimeBetween(DateTime time, DateTime start, DateTime end){
     if(time.millisecondsSinceEpoch > start.millisecondsSinceEpoch && time.millisecondsSinceEpoch < end.millisecondsSinceEpoch){
       return true;
     }
@@ -88,6 +100,22 @@ class Calendar{
 
   void addEvents(List<Event> newEvents){
     events.addAll(newEvents);
+  }
+
+  void addEvent(Event newEvent){
+    events.add(newEvent);
+  }
+
+  List<Event> getAllEvents(){
+    return events;
+  }
+
+  bool updateEvent(Event event){
+    int index = events.indexWhere((e)=> e.id == event.id);
+    events[index] = event;
+    if(index != -1)
+      return true;
+    return false;
   }
 
   void removeEvent(Event event){

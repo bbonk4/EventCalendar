@@ -1,5 +1,4 @@
 class Result<T> {
-
   bool get passed {
     var res = data != null && errorMessages.isEmpty;
     if (res) {

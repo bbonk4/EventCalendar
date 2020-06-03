@@ -1,3 +1,6 @@
-## [0.0.2] 
+## [0.0.3]
 
-* Updated events to display current date of an event.
+* Added main example
+* Fixed Monthly recurring by last day
+* Cleaned up unnecessary code
+* Added JSON parser

@@ -1,6 +1,5 @@
 import 'package:event_calendar/Calendar_Enums.dart';
 import 'package:event_calendar/RecurrenceRule.dart';
-import 'package:event_calendar/Reminder.dart';
 import 'package:event_calendar/Result.dart';
 
 class Event{
@@ -13,11 +12,10 @@ class Event{
   Object attached;
   bool allDay;
   RecurrenceRule recurrenceRule;
-  Reminder reminder;
 
 
 
-  Event(this.startDate, {this.title, this.attached, this.id, this.description, this.currentDate, this.endDate, this.allDay, this.recurrenceRule, this.reminder}){
+  Event(this.startDate, {this.title, this.attached, this.id, this.description, this.currentDate, this.endDate, this.allDay, this.recurrenceRule}){
     startDate = convertFromLocal(startDate);
     if(currentDate == null) {
       currentDate = startDate;
@@ -29,6 +27,11 @@ class Event{
     }
     if(title == null){
       title = "";
+    }
+
+    if(recurrenceRule != null){
+      recurrenceRule.startDate = startDate;
+      recurrenceRule.initialize();
     }
   }
 
@@ -42,7 +45,6 @@ class Event{
       description: description,
       endDate: endDate,
       recurrenceRule: recurrenceRule,
-      reminder: reminder,
       attached: attached
     );
   }
@@ -55,8 +57,9 @@ class Event{
 
   //TODO Switch this to check the id
   operator ==(other) {
-   return currentDate == other.currentDate && title == other.title;
+    return convertToLocal(currentDate) == convertToLocal(other.currentDate) && id == other.id && title == other.title;
   }
+  int get hashCode => (super.hashCode);
 
     Event getNextEvent({DateTime startAfter}){
       Event nextTime;
@@ -123,4 +126,24 @@ class Event{
 
       return result;
     }
+
+
+  factory Event.fromJson(Map<String,dynamic> json){
+    return Event(
+      DateTime.parse(json["startDate"] ),
+      id:json['id'],
+      currentDate: DateTime.parse(json["currentDate"]),
+      attached: json["attached"],
+      title: json["title"],
+      recurrenceRule: RecurrenceRule.fromJson(json["recurrenceRule"]),
+      endDate: DateTime.parse(json["endDate"]),
+      description: json["description"],
+      allDay: json["allDay"]
+    );
+  }
+
+  Map<String,dynamic> toJson() {
+    return {"id":id,"title":title, "description": description, "startDate": startDate.toString(), "currentDate": currentDate.toString(), "endDate" : endDate.toString(), "attached":attached, "allDay" : allDay, "recurrenceRule": recurrenceRule.toJson()};
+  }
+
   }

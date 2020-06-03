@@ -13,25 +13,22 @@ class RecurrenceRule{
   Frequency frequency;
   List<DayOfTheWeek> byDay;
   int dayOffset;
-  bool isDayOfMonth;
   bool isLastDayOfMonth;
   List<MonthOfYear> monthOfYear;
   //Include these dates
   List<DateTime> exceptions;
   //Exclude these dates
   List<DateTime> exclusions;
+  List<DateTime> completed;
 
 
 
-  RecurrenceRule(this.startDate, this.frequency, {this.count, this.interval, this.until, this.allDay, this.byDay, this.exceptions, this.exclusions, this.isDayOfMonth, this.isLastDayOfMonth}){
+  RecurrenceRule( this.frequency, {this.startDate, this.count, this.interval, this.until, this.allDay, this.byDay, this.exceptions, this.exclusions, this.isLastDayOfMonth}){
    if(count == null){
      this.count = 1;
    }
    if(interval == null){
      this.interval = 1;
-   }
-   if(isDayOfMonth == null){
-     this.isDayOfMonth = false;
    }
    if(isLastDayOfMonth == null){
      this.isLastDayOfMonth = false;
@@ -39,9 +36,22 @@ class RecurrenceRule{
    if(byDay == null){
      this.byDay = List();
    }
-   startDate = convertFromLocal(startDate);
+   if(exceptions == null){
+     this.exceptions  = List();
+   }
+   if(exclusions == null){
+     this.exclusions = List();
+   }
 
-   until = calculateWeeklyEndDate();
+
+   if(startDate != null){
+     initialize();
+   }
+  }
+
+  void initialize(){
+    startDate = convertFromLocal(startDate);
+    until = calculateWeeklyEndDate();
   }
 
   //Exclusive
@@ -154,7 +164,7 @@ class RecurrenceRule{
       DateTime temp;
 
       //Option 1 is monthly by dayOfMonth
-      if(isDayOfMonth && !isLastDayOfMonth){
+      if(!isLastDayOfMonth){
         if(initial){
           temp = start;
         }else{
@@ -211,10 +221,8 @@ class RecurrenceRule{
       return null;
     Duration dif = -start.difference(dates[0]);
 
-    int position = 0;
     for(int i = 0; i < dates.length; i++){
       if(dif > -start.difference(dates[i]) && start.difference(dates[i]).isNegative || (initial && start == dates[i])){
-        position = i;
         dif = -start.difference(dates[i]);
       }
     }
@@ -276,7 +284,7 @@ class RecurrenceRule{
         temp = new DateTime.utc(
             start.year,
             start.month,
-            1,
+            lastDayOfMonth(start) - dayOffset,
             start.hour,
             start.minute,
             start.second,);
@@ -288,12 +296,13 @@ class RecurrenceRule{
             start.hour,
             start.minute,
             start.second,);
+        temp = new DateTime(temp.year, temp.month, lastDayOfMonth(temp) - dayOffset, temp.hour, temp.minute, temp.second);
       }
       int attempts = 1;
+
       while(lastDayOfMonth(temp) - dayOffset <= 0){
         attempts++;
-        temp = new DateTime.utc(start.year, start.month + attempts, 1, startDate.hour, startDate.minute, startDate.second);
-        temp = new DateTime.utc(start.year, temp.month, lastDayOfMonth(temp) - dayOffset,  startDate.hour, startDate.minute, startDate.second);
+        temp = new DateTime.utc(start.year, start.month + attempts, lastDayOfMonth(temp) - dayOffset,  startDate.hour, startDate.minute, startDate.second);
       }
     }else {
 
@@ -355,4 +364,41 @@ class RecurrenceRule{
     return result;
   }
 
+  factory RecurrenceRule.fromJson(Map<String,dynamic> json){
+    return RecurrenceRule(
+      json['frequency'],
+      startDate: json['startDate'],
+      allDay: json["allDay"],
+      byDay: stringToDayOfWeek(json["byDay"]),
+      count: json["count"],
+      interval: json["interval"],
+      isLastDayOfMonth: json["isLastDayOfMonth"],
+      exceptions: json["exceptions"].toString().split(",").map((s){
+        if(s.isEmpty)
+          return null;
+        return DateTime.parse(s);
+      }).toList(),
+      exclusions: json["exclusions"].toString().split(",").map((s){
+        if(s.isEmpty)
+          return null;
+        return DateTime.parse(s);
+      }).toList(),
+      until: json["until"]
+    );
+  }
+
+  Map<String,dynamic> toJson() {
+    return {"count":count,
+    "interval":interval,
+    "startDate":startDate,
+    "until" : until,
+    "allDay" : allDay,
+    "frequency" : frequency,
+    "byDay" : byDay.toString(),
+    "dayOffset" : dayOffset,
+    "isLastDayOfMonth": isLastDayOfMonth,
+    "monthOfYear": monthOfYear.toString(),
+    "exceptions": exceptions.length==0?"":exceptions.toString(),
+    "exclusions": exclusions.length==0?"":exclusions.toString()};
+  }
 }
