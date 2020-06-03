@@ -369,7 +369,7 @@ class RecurrenceRule{
       return null;
     return RecurrenceRule(
       json['frequency'],
-      startDate: json['startDate'],
+      startDate: DateTime.parse(json['startDate']),
       allDay: json["allDay"],
       byDay: stringToDayOfWeek(json["byDay"]),
       count: json["count"],
@@ -385,15 +385,15 @@ class RecurrenceRule{
           return null;
         return DateTime.parse(s);
       }).toList(),
-      until: json["until"]
+      until: DateTime.parse(json["until"])
     );
   }
 
   Map<String,dynamic> toJson() {
     return {"count":count,
     "interval":interval,
-    "startDate":startDate,
-    "until" : until,
+    "startDate":startDate.toString(),
+    "until" : until.toString(),
     "allDay" : allDay,
     "frequency" : frequency,
     "byDay" : byDay.toString(),

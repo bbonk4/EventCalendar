@@ -1,3 +1,7 @@
+## [0.0.6]
+
+*Fixed datetime error in ReccurenceRule JSON
+
 ## [0.0.5]
 
 *Fixed null ReccurenceRule in JSON
