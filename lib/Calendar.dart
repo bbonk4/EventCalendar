@@ -77,8 +77,16 @@ class Calendar{
   }
 
   factory Calendar.fromJson(Map<String,dynamic> json){
+    List<dynamic> tempListEvents = (json["events"] as List);
+    List<Event> tmpEvents = tempListEvents.map((e){
+      Map<String,dynamic> data = e.cast<String,dynamic>();
+      return Event.fromJson(data);
+    }).toList();
+
     return Calendar(
       id:json['id'],
+      title: json['title'],
+      events: tmpEvents
     );
   }
 

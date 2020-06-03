@@ -367,24 +367,24 @@ class RecurrenceRule{
   factory RecurrenceRule.fromJson(Map<String,dynamic> json){
     if(json == null)
       return null;
+    List<DateTime> tmpExcept;
+    (json["exceptions"] as List<dynamic>).forEach((s){
+      tmpExcept.add(DateTime.parse(s));
+    });
+    List<DateTime> tmpExclude;
+    (json["exclusions"] as List<dynamic>).forEach((s){
+      tmpExclude.add(DateTime.parse(s));
+    });
     return RecurrenceRule(
-      json['frequency'],
+      Frequency.values[json['frequency']],
       startDate: DateTime.parse(json['startDate']),
       allDay: json["allDay"],
       byDay: stringToDayOfWeek(json["byDay"]),
       count: json["count"],
       interval: json["interval"],
       isLastDayOfMonth: json["isLastDayOfMonth"],
-      exceptions: json["exceptions"].toString().split(",").map((s){
-        if(s.isEmpty)
-          return null;
-        return DateTime.parse(s);
-      }).toList(),
-      exclusions: json["exclusions"].toString().split(",").map((s){
-        if(s.isEmpty)
-          return null;
-        return DateTime.parse(s);
-      }).toList(),
+      exceptions: tmpExcept,
+      exclusions: tmpExclude,
       until: DateTime.parse(json["until"])
     );
   }
@@ -395,12 +395,16 @@ class RecurrenceRule{
     "startDate":startDate.toString(),
     "until" : until.toString(),
     "allDay" : allDay,
-    "frequency" : frequency,
+    "frequency" : frequency.index,
     "byDay" : byDay.toString(),
     "dayOffset" : dayOffset,
     "isLastDayOfMonth": isLastDayOfMonth,
     "monthOfYear": monthOfYear.toString(),
-    "exceptions": exceptions.length==0?"":exceptions.toString(),
-    "exclusions": exclusions.length==0?"":exclusions.toString()};
+    "exceptions": exceptions.map((date){
+      return date.toString();
+    }).toList(),
+    "exclusions": exclusions.map((date){
+      return date.toString();
+    }).toList()};
   }
 }

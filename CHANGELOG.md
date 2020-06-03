@@ -1,3 +1,7 @@
+## [0.0.7]
+
+*Fixed datetime error in Calendar JSON
+
 ## [0.0.6]
 
 *Fixed datetime error in ReccurenceRule JSON
