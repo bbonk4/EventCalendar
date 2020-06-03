@@ -50,6 +50,7 @@ class Calendar{
     }else if(event != null){
       startAfter = event.currentDate;
     }
+    startAfter = convertFromLocal(startAfter);
     Event nextTime;
     int compare;
     for(int i = 0; i < events.length; i++){
@@ -58,18 +59,16 @@ class Calendar{
         if(event != null && events[i].title.compareTo(event.title).isNegative || compare == null) {
           if(nextTime != null) {
             compare = events[i].title.compareTo(nextTime.title);
-          }else{
+          }else if(event != null){
             compare = events[i].title.compareTo(event.title);
           }
 
-          if(compare < 0 || nextEvent.currentDate != event.currentDate) {
+          if((compare != null && compare < 0) || (event != null && nextEvent.currentDate != event.currentDate) || (event == null && nextTime == null)) {
             nextTime = nextEvent;
           }
-
         }else{
           nextTime = events[i].getNextEvent();
         }
-
       }
     }
 

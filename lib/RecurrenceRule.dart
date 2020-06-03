@@ -365,6 +365,8 @@ class RecurrenceRule{
   }
 
   factory RecurrenceRule.fromJson(Map<String,dynamic> json){
+    if(json == null)
+      return null;
     return RecurrenceRule(
       json['frequency'],
       startDate: json['startDate'],

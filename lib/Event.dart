@@ -143,7 +143,7 @@ class Event{
   }
 
   Map<String,dynamic> toJson() {
-    return {"id":id,"title":title, "description": description, "startDate": startDate.toString(), "currentDate": currentDate.toString(), "endDate" : endDate.toString(), "attached":attached, "allDay" : allDay, "recurrenceRule": recurrenceRule.toJson()};
+    return {"id":id,"title":title, "description": description, "startDate": startDate.toString(), "currentDate": currentDate.toString(), "endDate" : endDate.toString(), "attached":attached, "allDay" : allDay, "recurrenceRule": recurrenceRule!=null?recurrenceRule.toJson(): null};
   }
 
   }
