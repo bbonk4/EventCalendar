@@ -1,6 +1,3 @@
-## [0.0.3]
+## [0.0.4]
 
-* Added main example
-* Fixed Monthly recurring by last day
-* Cleaned up unnecessary code
-* Added JSON parser
+* Fixed Weekly repeating

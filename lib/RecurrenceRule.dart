@@ -264,7 +264,7 @@ class RecurrenceRule{
         temp = temp.add(Duration(days: dif));
         temp = new DateTime.utc(temp.year, temp.month, temp.day, startDate.hour, startDate.minute, startDate.second);
       }else if(!initial) {
-        temp = temp.add(Duration(days: (start.weekday - 1) + 7));
+        temp = temp.add(Duration(days: 7));
         temp = new DateTime.utc(temp.year, temp.month, temp.day, startDate.hour, startDate.minute, startDate.second);
       }
 
@@ -354,7 +354,7 @@ class RecurrenceRule{
       times.add(time);
       time = nextDateTime(time, position: times.length);
     }
-    print(times);
+
     if(times.length > 0) {
       result.data = times;
     }else{
