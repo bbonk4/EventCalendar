@@ -3,7 +3,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:event_calendar/event_calendar.dart';
 
 void main() {
-
   test('Check single event ocurrence', () {
     final calendar = Calendar(id: "calendarId", title: "My Calendar");
     calendar.addEvents([Event(DateTime.fromMillisecondsSinceEpoch(1588084707000), title: "Thing 1", id: "1")]);
@@ -184,16 +183,55 @@ void main() {
 
   test('Check next event', () {
     final calendar = Calendar(id: "calendarId", title: "My Calendar");
-    calendar.addEvents([Event(DateTime.fromMillisecondsSinceEpoch(1588063107000),recurrenceRule: RecurrenceRule(Frequency.daily,interval: 2, count: 2), title: "Thing 1", id: "1"),
-      Event(DateTime.fromMillisecondsSinceEpoch(1590418800000),recurrenceRule: RecurrenceRule(Frequency.weekly, byDay: [DayOfTheWeek.Monday, DayOfTheWeek.Tuesday, DayOfTheWeek.Wednesday, DayOfTheWeek.Thursday, DayOfTheWeek.Friday],interval: 1, count: 10), title: "Thing 1", id: "1")]);
+    calendar.addEvents([
+      Event(DateTime.fromMillisecondsSinceEpoch(1588063107000),
+          recurrenceRule: RecurrenceRule(Frequency.daily, interval: 2, count: 2), title: "Thing 1", id: "1"),
+      Event(DateTime.fromMillisecondsSinceEpoch(1588063107000),
+          recurrenceRule: RecurrenceRule(Frequency.daily, interval: 2, count: 2), title: "Thing 2", id: "2"),
+      Event(DateTime.fromMillisecondsSinceEpoch(1588063107000),
+          recurrenceRule: RecurrenceRule(Frequency.daily, interval: 2, count: 2), title: "Thing 3", id: "3"),
+      Event(DateTime.fromMillisecondsSinceEpoch(1590418800000),
+          recurrenceRule: RecurrenceRule(Frequency.weekly,
+              byDay: [
+                DayOfTheWeek.Monday,
+                DayOfTheWeek.Tuesday,
+                DayOfTheWeek.Wednesday,
+                DayOfTheWeek.Thursday,
+                DayOfTheWeek.Friday
+              ],
+              interval: 1,
+              count: 10),
+          title: "Thing 4",
+          id: "4")
+    ]);
 
     expect(
-        calendar.getNextEvent(event: Event(DateTime.fromMillisecondsSinceEpoch(1588063107000),recurrenceRule: RecurrenceRule(Frequency.daily,interval: 2, count: -1), title: "Thing 1", id: "1")),
-         Event(DateTime.fromMillisecondsSinceEpoch(1588063107000), currentDate: DateTime.fromMillisecondsSinceEpoch(1588235907000),recurrenceRule: RecurrenceRule(Frequency.daily, interval: 2, count: -1), title: "Thing 1", id: "1"),
-        );
+      calendar.getNextEvent(
+          event: Event(DateTime.fromMillisecondsSinceEpoch(1588063107000),
+              recurrenceRule: RecurrenceRule(Frequency.daily, interval: 2, count: -1), title: "Thing 1", id: "1")),
+        Event(DateTime.fromMillisecondsSinceEpoch(1588063107000),
+            recurrenceRule: RecurrenceRule(Frequency.daily, interval: 2, count: 2), title: "Thing 2", id: "2"),
+    );
     expect(
-      calendar.getNextEvent( event: Event(DateTime.fromMillisecondsSinceEpoch(1588063107000), currentDate: DateTime.fromMillisecondsSinceEpoch(1588235907000), recurrenceRule: RecurrenceRule(Frequency.daily,interval: 2, count: 2), title: "Thing 1", id: "1")),
-      Event(DateTime.fromMillisecondsSinceEpoch(1590418800000),recurrenceRule: RecurrenceRule(Frequency.weekly, byDay: [DayOfTheWeek.Monday, DayOfTheWeek.Tuesday, DayOfTheWeek.Wednesday, DayOfTheWeek.Thursday, DayOfTheWeek.Friday],interval: 1, count: 10), title: "Thing 1", id: "1"),
+      calendar.getNextEvent(
+          event: Event(DateTime.fromMillisecondsSinceEpoch(1590418800000),
+              currentDate: DateTime.fromMillisecondsSinceEpoch(1588235907000),
+              recurrenceRule: RecurrenceRule(Frequency.daily, interval: 2, count: 2),
+              title: "Thing 3",
+              id: "3")),
+      Event(DateTime.fromMillisecondsSinceEpoch(1590418800000),
+          recurrenceRule: RecurrenceRule(Frequency.weekly,
+              byDay: [
+                DayOfTheWeek.Monday,
+                DayOfTheWeek.Tuesday,
+                DayOfTheWeek.Wednesday,
+                DayOfTheWeek.Thursday,
+                DayOfTheWeek.Friday
+              ],
+              interval: 1,
+              count: 10),
+          title: "Thing 4",
+          id: "4"),
     );
   });
 
@@ -211,5 +249,4 @@ void main() {
       Event(DateTime.fromMillisecondsSinceEpoch(1590418800000),recurrenceRule: RecurrenceRule(Frequency.weekly, byDay: [DayOfTheWeek.Monday, DayOfTheWeek.Tuesday, DayOfTheWeek.Wednesday, DayOfTheWeek.Thursday, DayOfTheWeek.Friday],interval: 1, count: 10), title: "Thing 1", id: "1"),
     );
   });
-
 }

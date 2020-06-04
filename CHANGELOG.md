@@ -1,3 +1,7 @@
+## [0.0.8]
+
+*Corrected Next Event returning wrong date
+
 ## [0.0.7]
 
 *Fixed datetime error in Calendar JSON
