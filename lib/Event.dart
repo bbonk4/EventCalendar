@@ -138,11 +138,11 @@ class Event {
   int compareTo(Event other) {
     int compare = 0;
     if(other == null)
-      return -2;
+      return null;
     compare = convertToLocal(currentDate).compareTo(convertToLocal(other.currentDate));
-    if (compare == 0) {
+    if (compare == 0 && title != null && other.title != null) {
       compare = title.compareTo(other.title);
-      if (compare == 0) {
+      if (compare == 0 && id != null && other.id != null) {
         compare = id.compareTo(other.id);
       }
     }

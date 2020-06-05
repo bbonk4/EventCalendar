@@ -1,3 +1,7 @@
+## [0.0.10]
+
+*Fixed Recurrence getNextDate error
+
 ## [0.0.9]
 
 *Corrected Next Event throwing null

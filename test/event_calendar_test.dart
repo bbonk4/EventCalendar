@@ -185,11 +185,12 @@ void main() {
     final calendar = Calendar(id: "calendarId", title: "My Calendar");
     calendar.addEvents([
       Event(DateTime.fromMillisecondsSinceEpoch(1588063107000),
-          recurrenceRule: RecurrenceRule(Frequency.daily, interval: 2, count: 2), title: "Thing 1", id: "1"),
+          recurrenceRule: RecurrenceRule(Frequency.daily, interval: 2, count: 3), title: "Thing 1", id: "1"),
       Event(DateTime.fromMillisecondsSinceEpoch(1588063107000),
-          recurrenceRule: RecurrenceRule(Frequency.daily, interval: 2, count: 2), title: "Thing 2", id: "2"),
-      Event(DateTime.fromMillisecondsSinceEpoch(1588063107000),
-          recurrenceRule: RecurrenceRule(Frequency.daily, interval: 2, count: 2), title: "Thing 3", id: "3"),
+          recurrenceRule: RecurrenceRule(Frequency.daily, interval: 2, count: 3), title: "Thing 2", id: "2"),
+      Event(DateTime.fromMillisecondsSinceEpoch(1588063207000),
+          recurrenceRule: RecurrenceRule(Frequency.yearly, interval: 2, count: 3), title: "Thing 3", id: "3"),
+      Event(DateTime.fromMillisecondsSinceEpoch(1588063207000), title: "moo 3", id: "5"),
       Event(DateTime.fromMillisecondsSinceEpoch(1590418800000),
           recurrenceRule: RecurrenceRule(Frequency.weekly,
               byDay: [
@@ -204,6 +205,13 @@ void main() {
           title: "Thing 4",
           id: "4")
     ]);
+
+//    Event event = calendar.getNextEvent(startAfter: DateTime.fromMillisecondsSinceEpoch(1588070307000));
+//    while(event != null){
+//      print(event.toJson());
+//      event = calendar.getNextEvent(event: event);
+//    }
+
     expect(
       calendar.getNextEvent(
           event: Event(DateTime.fromMillisecondsSinceEpoch(1588063107000),
@@ -238,7 +246,6 @@ void main() {
     final calendar = Calendar(id: "calendarId", title: "My Calendar");
     calendar.addEvents([Event.fromJson(Event(DateTime.fromMillisecondsSinceEpoch(1588063107000), title: "Thing 1", id: "1").toJson()),
       Event.fromJson(Event(DateTime.fromMillisecondsSinceEpoch(1590418800000),recurrenceRule: RecurrenceRule(Frequency.weekly, byDay: [DayOfTheWeek.Monday, DayOfTheWeek.Tuesday, DayOfTheWeek.Wednesday, DayOfTheWeek.Thursday, DayOfTheWeek.Friday],interval: 1, count: 10), title: "Thing 1", id: "1").toJson())]);
-    print(Calendar.fromJson(calendar.toJson()));
     expect(
         calendar.getNextEvent(startAfter: DateTime.fromMillisecondsSinceEpoch(1588063106000)),
          Event(DateTime.fromMillisecondsSinceEpoch(1588063107000), title: "Thing 1", id: "1"),

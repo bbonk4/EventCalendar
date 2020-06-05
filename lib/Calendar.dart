@@ -57,35 +57,16 @@ class Calendar {
       if (nextTime != null && nextEvent.compareTo(nextTime) < 0) {
         if (event != null && nextEvent.compareTo(event) > 0) {
           nextTime = nextEvent;
-        }
-      }
-
-      if (nextTime == null && (nextEvent.compareTo(event) > 0 || event == null)) {
-        nextTime = nextEvent;
-      }
-    }
-
-    Event secondPass;
-    //Try the event after the next
-    for (int j = 0; j < events.length; j++) {
-      Event nextEvent = events[j].getNextEvent(startAfter: startAfter);
-      if (nextEvent == null) continue;
-      nextEvent = nextEvent.getNextEvent();
-      if (nextEvent == null) continue;
-      if (secondPass != null && nextEvent.compareTo(secondPass) < 0) {
-        if (event != null && nextEvent.compareTo(event) > 0) {
+        }else if(event == null){
           nextTime = nextEvent;
         }
       }
 
-      if (secondPass == null && (nextEvent.compareTo(event) > 0|| event == null)) {
-        secondPass = nextEvent;
+      if (nextTime == null && (event == null || nextEvent.compareTo(event) > 0)) {
+        nextTime = nextEvent;
       }
     }
 
-    if (nextTime != null && secondPass != null && secondPass.compareTo(nextTime) < 0) {
-      nextTime = secondPass;
-    }
 
     return nextTime;
   }

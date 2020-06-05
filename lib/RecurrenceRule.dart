@@ -75,7 +75,7 @@ class RecurrenceRule {
     }
 
     if (frequency == Frequency.hourly) {
-      int offset = (start.difference(startDate).inMilliseconds / HOUR_IN_MILLI).ceil();
+      int offset = (start.difference(startDate).inMilliseconds / (interval*HOUR_IN_MILLI)).ceil()*interval;
       bool initial = false;
 
       if (start.difference(startDate).isNegative) {
@@ -95,11 +95,9 @@ class RecurrenceRule {
       }
 
       if (count >= offset / interval) {
-        nextTime =
-            DateTime.fromMillisecondsSinceEpoch(startDate.millisecondsSinceEpoch + offset * HOUR_IN_MILLI).toUtc();
+        nextTime = startDate.add(Duration(milliseconds: offset * HOUR_IN_MILLI));
       } else if (count == -1) {
-        nextTime =
-            DateTime.fromMillisecondsSinceEpoch(startDate.millisecondsSinceEpoch + offset * HOUR_IN_MILLI).toUtc();
+        nextTime = startDate.add(Duration(milliseconds: offset * HOUR_IN_MILLI));
       }
 
       if (initial) {
@@ -108,7 +106,7 @@ class RecurrenceRule {
     }
 
     if (frequency == Frequency.daily) {
-      int offset = (start.difference(startDate).inMilliseconds / DAY_IN_MILLI).ceil();
+      int offset = (start.difference(startDate).inMilliseconds / (interval*DAY_IN_MILLI)).ceil()*interval;
       bool initial = false;
 
       if (start.difference(startDate).isNegative) {
@@ -116,23 +114,14 @@ class RecurrenceRule {
         initial = true;
       }
 
-      if (start == startDate ||
-          !(start
-                      .difference(
-                          DateTime.fromMillisecondsSinceEpoch(startDate.millisecondsSinceEpoch + offset * DAY_IN_MILLI)
-                              .toUtc())
-                      .inMilliseconds /
-                  DAY_IN_MILLI)
-              .isNegative) {
+      if (start == startDate || !(start.difference(startDate.add(Duration(milliseconds: offset*DAY_IN_MILLI))).inMilliseconds / DAY_IN_MILLI).isNegative) {
         offset += interval;
       }
 
       if (count >= offset / interval) {
-        nextTime =
-            DateTime.fromMillisecondsSinceEpoch(startDate.millisecondsSinceEpoch + offset * DAY_IN_MILLI).toUtc();
+        nextTime = startDate.add(Duration(milliseconds: offset*DAY_IN_MILLI));
       } else if (count == -1) {
-        nextTime =
-            DateTime.fromMillisecondsSinceEpoch(startDate.millisecondsSinceEpoch + offset * DAY_IN_MILLI).toUtc();
+        nextTime = startDate.add(Duration(milliseconds: offset*DAY_IN_MILLI));
       }
 
       if (initial) {
