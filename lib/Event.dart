@@ -137,6 +137,8 @@ class Event {
   // positive means this is after
   int compareTo(Event other) {
     int compare = 0;
+    if(other == null)
+      return -2;
     compare = convertToLocal(currentDate).compareTo(convertToLocal(other.currentDate));
     if (compare == 0) {
       compare = title.compareTo(other.title);

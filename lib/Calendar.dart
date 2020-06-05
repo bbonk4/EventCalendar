@@ -43,6 +43,7 @@ class Calendar {
   }
 
   Event getNextEvent({Event event, DateTime startAfter}) {
+
     if (event == null && startAfter == null) {
       startAfter = convertFromLocal(DateTime.now());
     } else if (event != null) {
@@ -59,7 +60,7 @@ class Calendar {
         }
       }
 
-      if (nextTime == null && nextEvent.compareTo(event) > 0) {
+      if (nextTime == null && (nextEvent.compareTo(event) > 0 || event == null)) {
         nextTime = nextEvent;
       }
     }
@@ -67,7 +68,9 @@ class Calendar {
     Event secondPass;
     //Try the event after the next
     for (int j = 0; j < events.length; j++) {
-      Event nextEvent = events[j].getNextEvent(startAfter: startAfter).getNextEvent();
+      Event nextEvent = events[j].getNextEvent(startAfter: startAfter);
+      if (nextEvent == null) continue;
+      nextEvent = nextEvent.getNextEvent();
       if (nextEvent == null) continue;
       if (secondPass != null && nextEvent.compareTo(secondPass) < 0) {
         if (event != null && nextEvent.compareTo(event) > 0) {
@@ -75,12 +78,12 @@ class Calendar {
         }
       }
 
-      if (secondPass == null && nextEvent.compareTo(event) > 0) {
+      if (secondPass == null && (nextEvent.compareTo(event) > 0|| event == null)) {
         secondPass = nextEvent;
       }
     }
 
-    if (secondPass.compareTo(nextTime) < 0) {
+    if (nextTime != null && secondPass != null && secondPass.compareTo(nextTime) < 0) {
       nextTime = secondPass;
     }
 

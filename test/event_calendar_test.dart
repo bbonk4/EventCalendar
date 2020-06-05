@@ -200,11 +200,10 @@ void main() {
                 DayOfTheWeek.Friday
               ],
               interval: 1,
-              count: 10),
+              count: 1),
           title: "Thing 4",
           id: "4")
     ]);
-
     expect(
       calendar.getNextEvent(
           event: Event(DateTime.fromMillisecondsSinceEpoch(1588063107000),
