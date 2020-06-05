@@ -1,3 +1,7 @@
+## [0.0.11]
+
+* Calendar nextEvent returning null too early
+
 ## [0.0.10]
 
 *Fixed Recurrence getNextDate error

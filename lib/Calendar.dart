@@ -47,7 +47,7 @@ class Calendar {
     if (event == null && startAfter == null) {
       startAfter = convertFromLocal(DateTime.now());
     } else if (event != null) {
-      startAfter = event.currentDate.subtract(Duration(seconds: 1));
+      startAfter = event.currentDate;
     }
     startAfter = convertFromLocal(startAfter);
     Event nextTime;
