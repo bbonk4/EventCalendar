@@ -1,3 +1,7 @@
+## [0.0.9]
+
+*Corrected Next Event throwing null
+
 ## [0.0.8]
 
 *Corrected Next Event returning wrong date
