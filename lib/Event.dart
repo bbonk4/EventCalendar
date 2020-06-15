@@ -73,6 +73,7 @@ class Event {
       startAfter = currentDate;
     }
 
+
     if (recurrenceRule != null) {
       DateTime nextDate;
 
@@ -96,6 +97,7 @@ class Event {
         nextTime = this;
       }
     }
+
 
     return nextTime;
   }

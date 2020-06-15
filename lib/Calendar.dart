@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:event_calendar/Calendar_Enums.dart';
 import 'package:event_calendar/Event.dart';
 import 'package:event_calendar/Result.dart';
@@ -49,7 +51,7 @@ class Calendar {
     } else if (event != null) {
       startAfter = event.currentDate;
     }
-    startAfter = convertFromLocal(startAfter);
+    startAfter = convertFromLocal(startAfter).subtract(Duration(seconds: 1));
     Event nextTime;
     for (int i = 0; i < events.length; i++) {
       Event nextEvent = events[i].getNextEvent(startAfter: startAfter);
@@ -62,10 +64,16 @@ class Calendar {
         }
       }
 
-      if (nextTime == null && (event == null || nextEvent.compareTo(event) > 0)) {
+      if(nextEvent.compareTo(event) != null && nextEvent.compareTo(event) <= 0){
+        nextEvent = nextEvent.getNextEvent(startAfter: nextEvent.currentDate.add(Duration(seconds: 1)));
+        if (nextEvent == null) continue;
+      }
+      if ((nextTime == null || (nextTime != null && nextEvent.compareTo(nextTime) < 0)) && (event == null || nextEvent.compareTo(event) > 0)) {
         nextTime = nextEvent;
       }
+
     }
+
 
 
     return nextTime;

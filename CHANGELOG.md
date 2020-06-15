@@ -1,3 +1,7 @@
+## [0.0.12]
+
+* Corrected Interval issue and getNextEvent
+
 ## [0.0.11]
 
 * Calendar nextEvent returning null too early

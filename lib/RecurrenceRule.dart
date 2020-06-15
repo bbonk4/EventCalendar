@@ -174,7 +174,7 @@ class RecurrenceRule {
         initial = true;
       }
 
-      int offset = getMonthsApart(startDate, start);
+      int offset = (getMonthsApart(startDate, start) / interval).ceil();
       DateTime temp;
 
       //Option 1 is monthly by dayOfMonth
@@ -269,6 +269,7 @@ class RecurrenceRule {
     int dif = day.index - (start.weekday - 1);
     DateTime temp = DateTime.fromMillisecondsSinceEpoch(start.millisecondsSinceEpoch).toUtc();
 
+
 //    print(start.weekday);
     if (dif.isNegative) {
 //      print("negative");
@@ -292,10 +293,15 @@ class RecurrenceRule {
       temp = new DateTime.utc(temp.year, temp.month, temp.day, startDate.hour, startDate.minute, startDate.second);
     }
 
+    if(((((temp.millisecondsSinceEpoch - startDate.millisecondsSinceEpoch) / WEEK_IN_MILLI).floor())%interval) > 0){
+      temp = temp.add(Duration(days: 7*((((temp.millisecondsSinceEpoch - startDate.millisecondsSinceEpoch) / WEEK_IN_MILLI).floor())%interval)));
+    }
+
     return temp;
   }
 
   DateTime nextByMonth(DateTime start, {bool initial}) {
+
     DateTime temp;
     if (isLastDayOfMonth) {
       if (initial) {
@@ -319,9 +325,10 @@ class RecurrenceRule {
         temp =
             new DateTime(temp.year, temp.month, lastDayOfMonth(temp) - dayOffset, temp.hour, temp.minute, temp.second);
       }
+
       int attempts = 1;
 
-      while (lastDayOfMonth(temp) - dayOffset <= 0) {
+      while (lastDayOfMonth(temp) - dayOffset <= 0 || temp.month % interval != startDate.month % interval) {
         attempts++;
         temp = new DateTime.utc(start.year, start.month + attempts, lastDayOfMonth(temp) - dayOffset, startDate.hour,
             startDate.minute, startDate.second);
@@ -330,13 +337,13 @@ class RecurrenceRule {
       temp =
           new DateTime.utc(start.year, start.month, startDate.day, startDate.hour, startDate.minute, startDate.second);
       int attempts = 0;
-      if (temp == start) {
+      while (temp.compareTo(start) <= 0) {
         temp = new DateTime.utc(
             start.year, start.month + 1, startDate.day, startDate.hour, startDate.minute, startDate.second);
         attempts = 1;
       }
 
-      while (temp.day != startDate.day) {
+      while (temp.day != startDate.day || temp.month % interval != startDate.month % interval) {
         temp = new DateTime.utc(
             start.year, start.month + attempts, startDate.day, startDate.hour, startDate.minute, startDate.second);
         attempts++;
