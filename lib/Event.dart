@@ -1,3 +1,4 @@
+import 'package:event_calendar/AttachableObject.dart';
 import 'package:event_calendar/Calendar_Enums.dart';
 import 'package:event_calendar/RecurrenceRule.dart';
 import 'package:event_calendar/Result.dart';
@@ -9,7 +10,7 @@ class Event {
   DateTime startDate;
   DateTime currentDate;
   DateTime endDate;
-  Object attached;
+  AttachableObject attached;
   bool allDay;
   RecurrenceRule recurrenceRule;
 
@@ -164,16 +165,23 @@ class Event {
   }
 
   Map<String, dynamic> toJson() {
-    return {
+
+    Map<String, dynamic> data = {
       "id": id,
       "title": title,
       "description": description,
       "startDate": startDate.toString(),
       "currentDate": currentDate.toString(),
       "endDate": endDate.toString(),
-      "attached": attached,
       "allDay": allDay,
       "recurrenceRule": recurrenceRule != null ? recurrenceRule.toJson() : null
     };
+    try{
+      data["attached"] = attached.toJson();
+    }catch(e){
+
+    }
+
+    return data;
   }
 }

@@ -1,3 +1,7 @@
+## [0.0.13]
+
+* Added AttachableObject as an abstract for custom overriding
+
 ## [0.0.12]
 
 * Corrected Interval issue and getNextEvent

@@ -1,6 +1,6 @@
 name: event_calendar
 description: A flutter package to create local events non reliant on a device's local calendar system.
-version: 0.0.12
+version: 0.0.13
 author: BillyBonk
 homepage: https://github.com/bbonk4/EventCalendar
 
