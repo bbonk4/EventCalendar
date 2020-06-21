@@ -1,3 +1,7 @@
+## [0.0.14]
+
+* Fixed error in Event.fromJson when parsing a RecurrenceRule
+
 ## [0.0.13]
 
 * Added AttachableObject as an abstract for custom overriding
