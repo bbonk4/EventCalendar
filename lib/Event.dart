@@ -153,12 +153,16 @@ class Event {
   }
 
   factory Event.fromJson(Map<String, dynamic> json) {
+    Map<String,dynamic> rrule = null;
+    try{
+      rrule = Map<String,dynamic>.from(json["recurrenceRule"]);
+    }catch(e){}
     return Event(DateTime.parse(json["startDate"]),
         id: json['id'],
         currentDate: DateTime.parse(json["currentDate"]),
         attached: json["attached"],
         title: json["title"],
-        recurrenceRule: RecurrenceRule.fromJson(json["recurrenceRule"]),
+        recurrenceRule: RecurrenceRule.fromJson(rrule),
         endDate: DateTime.parse(json["endDate"]),
         description: json["description"],
         allDay: json["allDay"]);
